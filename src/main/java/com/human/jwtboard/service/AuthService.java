@@ -35,6 +35,7 @@ public class AuthService {
         return MemberResDto.of(memberRepository.save(member));
     }
 
+    @Transactional(readOnly = true)
     public TokenDto login(LoginReqDto dto) {
         UsernamePasswordAuthenticationToken authToken = dto.toAuthenticationToken();
         Authentication authentication = managerBuilder.getObject().authenticate(authToken);
