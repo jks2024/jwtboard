@@ -35,7 +35,6 @@ public class AuthService {
         return MemberResDto.of(memberRepository.save(member));
     }
 
-    @Transactional(readOnly = true) // 조회 전용 → 더티 체킹 생략으로 성능 향상
     public TokenDto login(LoginReqDto dto) {
         UsernamePasswordAuthenticationToken authToken = dto.toAuthenticationToken();
         Authentication authentication = managerBuilder.getObject().authenticate(authToken);
