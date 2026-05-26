@@ -1,5 +1,6 @@
 package com.human.jwtboard.service;
 
+import com.human.jwtboard.dto.request.PostReqDto;
 import com.human.jwtboard.dto.response.PostResDto;
 import com.human.jwtboard.entity.Member;
 import com.human.jwtboard.entity.Post;
@@ -39,7 +40,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public PostResDto create(PostResDto dto) {
+    public PostResDto create(PostReqDto dto) {
         Member author = getCurrentMember();
         Post post = Post.builder()
                 .title(dto.getTitle())
@@ -51,14 +52,13 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public PostResDto update(Long postId, PostResDto dto) {
+    public PostResDto update(Long postId, PostReqDto dto) {
         Post post = getPost(postId);
         checkAuthor(post.getAuthor());
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        return PostResDto.of(postRepository.save(post));
+        return PostResDto.of(post);
     }
-
 
     // 게시글 삭제
     @Transactional
@@ -98,7 +98,5 @@ public class PostService {
                     "작성자만 수행할 수 있습니다.");
         }
     }
-
-    // 페이지네이션 : 게시글은 목록 갯수가 많으므로 해당 페이지에 대한 게시글만 가져 오도록 함
 
 }
