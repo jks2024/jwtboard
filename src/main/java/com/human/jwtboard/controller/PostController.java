@@ -4,6 +4,7 @@ import com.human.jwtboard.dto.request.PostReqDto;
 import com.human.jwtboard.dto.response.ApiResponse;
 import com.human.jwtboard.dto.response.PostResDto;
 import com.human.jwtboard.service.PostService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,8 +62,10 @@ public class PostController {
 
     // 페이지네이션
     @GetMapping
+    // GET /api/posts?page=1&size=10
     public ResponseEntity<ApiResponse<Page<PostResDto>>> findAllByPage(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            @Parameter(hidden = true)   // ← 이 한 줄 추가
             Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.ok(postService.findAllByPage(pageable)));
     }
