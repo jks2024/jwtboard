@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -96,6 +97,19 @@ public class TokenProvider {
         }
         return false;
     }
+
+    // 4. 만료된 Access Token에서 memberId 추출
+    // validateToken()은 만료 토큰에서 false를 반환하므로 별도 메서드 필요
+    public Long getMemberIdFromToken(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+        return Long.parseLong(claims.getSubject());
+    }
+
+    // Refresh Token DB 저장용 만료 시각 반환
+    public LocalDateTime getRefreshTokenExpiry() {
+        return LocalDateTime.now().plusDays(7);  // 현재 시간에서 7일을 더해 만료 시간을 만들어 냄
+    }
+
 
     private Claims parseClaims(String accessToken) {
         try {
