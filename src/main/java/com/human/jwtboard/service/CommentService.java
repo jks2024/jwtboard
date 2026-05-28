@@ -38,7 +38,7 @@ public class CommentService {
     }
 
     // 댓글 목록 조회
-    public List<CommentResDto> findAllByPostId(Long postId) {
+    public List<CommentResDto> findByPostId(Long postId) {
         return commentRepository.findByPostIdOrderByCreatedAtAsc(postId)
                 .stream()
                 .map(CommentResDto::of)
