@@ -23,7 +23,7 @@ public class Comment {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩, 실제 사용 될 때 그때 DB에서 정보를 가져옴
     @JoinColumn(name = "member_id", nullable = false)
     private Member author;
 

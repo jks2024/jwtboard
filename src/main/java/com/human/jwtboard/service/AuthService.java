@@ -10,7 +10,6 @@ import com.human.jwtboard.entity.RefreshToken;
 import com.human.jwtboard.exception.CustomException;
 import com.human.jwtboard.repository.MemberRepository;
 import com.human.jwtboard.repository.RefreshTokenRepository;
-import com.human.jwtboard.security.SecurityUtil;
 import com.human.jwtboard.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.human.jwtboard.security.SecurityUtil;
-
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -81,7 +78,7 @@ public class AuthService {
         // 3. Refresh Token 만료 확인
         if (savedToken.isExpired()) {
             refreshTokenRepository.delete(savedToken);
-            throw new CustomException(HttpStatus.UNAUTHORIZED, "세션이 만료되었씁니다. 다시 로그인해주세요.");
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "세션이 만료되었습니다. 다시 로그인해주세요.");
         }
 
         // 4. 전달받은 토큰과 DB 토큰 일치 확인 (탈취 방어)
