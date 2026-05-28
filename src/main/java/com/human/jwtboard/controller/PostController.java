@@ -15,7 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class PostController {
     private final PostService postService;
 
     // 게시글 전체 조회
-    @GetMapping("/all")                          // ✅ "api/posts" → "/all"
+    @GetMapping("/all")                          // "api/posts" → "/all"
     public ResponseEntity<ApiResponse<List<PostResDto>>> findAll() {
         return ResponseEntity.ok(ApiResponse.ok(postService.findAll()));
     }
@@ -38,7 +37,7 @@ public class PostController {
     }
 
     // 게시글 작성
-    @PostMapping                                 // ✅ @PutMapping → @PostMapping
+    @PostMapping                                 // @PutMapping → @PostMapping
     public ResponseEntity<ApiResponse<PostResDto>> create(
             @RequestBody @Valid PostReqDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -49,7 +48,7 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PostResDto>> update(
             @PathVariable Long id,
-            @RequestBody @Valid PostReqDto dto) { // ✅ PostResDto → PostReqDto
+            @RequestBody @Valid PostReqDto dto) { // PostResDto → PostReqDto
         return ResponseEntity.ok(ApiResponse.ok("게시글이 수정되었습니다.", postService.update(id, dto)));
     }
 
