@@ -4,6 +4,7 @@ import com.human.jwtboard.dto.request.CommentReqDto;
 import com.human.jwtboard.dto.response.ApiResponse;
 import com.human.jwtboard.dto.response.CommentResDto;
 import com.human.jwtboard.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,24 @@ public class CommentController {
     }
 
     // 댓글 수정  PUT /api/posts/{postId}/comments/{commentId}
-
+    @PutMapping("/{commentId}")
+    public ResponseEntity<ApiResponse<CommentResDto>> update(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @RequestBody @Valid CommentReqDto dto) {
+        return ResponseEntity.ok(
+                ApiResponse.ok("댓글이 수정되었습니다.",
+                        commentService.update(commentId, dto)));
+    }
 
     // 댓글 삭제  DELETE /api/posts/{postId}/comments/{commentId}
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @PathVariable Long postId,
+            @PathVariable Long commentId) {
+        commentService.delete(commentId);
+        return ResponseEntity.ok(
+                ApiResponse.ok("댓글이 삭제되었습니다.", null));
+    }
 
 }
