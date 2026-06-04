@@ -63,6 +63,12 @@ public class AuthService {
                                         .expiresAt(expiry)
                                         .build())
                 );
+        // 회원 이름을 조회해서 TokenDto에 포함
+        String memberName = memberRepository.findById(memberId)
+                .map(Member::getName)
+                .orElse("");
+        tokenDto.setName(memberName);
+
         return tokenDto;
     }
 

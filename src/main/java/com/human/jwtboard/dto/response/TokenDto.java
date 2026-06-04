@@ -12,4 +12,5 @@ public class TokenDto {
     private String accessToken;         // 실제 API 호출에 사용
     private String refreshToken;        // accessToken 재발급용
     private Long   accessTokenExpiresIn; // 만료 시각 (Unix timestamp ms)
+    private String name;  // 로그인한 회원 이름
 }
