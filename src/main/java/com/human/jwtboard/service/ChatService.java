@@ -7,8 +7,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -61,12 +63,39 @@ public class ChatService {
             if (chatMessage.getSender() != null) {
                 chatMessage.setMessage(chatMessage.getSender() + "님이 입장 했습니다.");
                 // 전체에게 메시지 전송
+                sendMessageToAll(roomId, chatMessage);
             }
         }
-
-
+    }
+    // 채팅방 퇴장 : 세션 제거, 퇴장 메시지 브로드캐스트, 빈 방 삭제
+    public void removeSessionAndHandleExit(String roomId,
+                                           WebSocketSession session,
+                                           ChatMessageDto chatMessage) {
+        ChatRoomResDto room = findRoomById(roomId);
+        if (room != null) {
+            room.getSessions().remove(session);
+            if (chatMessage.getSender() != null) {
+                chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
+                // 전체 메시지 전송
+                sendMessageToAll(roomId, chatMessage);
+            }
+            if (room.isSessionEmpty()) {
+                removeRoom(roomId);
+            }
+        }
+    }
+    public void sendMessageToAll(String roomId, ChatMessageDto message) {
+        ChatRoomResDto room = findRoomById(roomId);
+        if (room != null) {
+            room.getSessions().forEach(s -> sendMessage(s, message));
+        }
     }
 
-
-
+    public <T> void sendMessage(WebSocketSession session, T message) {
+        try {
+            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+        } catch (IOException e) {
+            log.error("메시지 전송 실패: {}", e.getMessage());
+        }
+    }
 }
